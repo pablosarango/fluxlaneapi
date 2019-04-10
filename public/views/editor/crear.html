@@ -1,0 +1,259 @@
+<div class="cuerpo" ng-cloak="">
+    <md-content class="md-padding">
+        <md-tabs md-selected="initialData.indexTab" md-align-tabs="bottom" md-center-tabs>
+
+
+            <!-- TAB - INFORMACIÓN -->
+            <md-tab id="informacion">
+                <md-tab-label>Información</md-tab-label>
+                <md-tab-body>
+                    <div class="containerInfo md-inline-form" layout="column">
+                        <label class="titulo" layout="row" layout-align="center center">Nueva Ruta</label>
+                        <md-content class="colorFondo" layout-padding="">
+                            <div layout-gt-sm="row">
+                                <md-input-container class="md-block" flex-gt-sm="">
+                                    <label>Nombre ruta</label>
+                                    <input ng-model="ruta.nombre" required>
+                                </md-input-container>
+                                <div layout="column">
+                                    <md-select placeholder="Asignar a conductor" ng-model="conductor" md-on-open="cargarConductor()" style="min-width: 200px;"
+                                        required>
+                                        <md-option ng-value="conductor" ng-repeat="conductor in conductores">{{conductor.name}}</md-option>
+                                    </md-select>
+                                    <p class="md-caption">Conductor asignado: {{ conductor ? conductor.name : 'Nadie' }}</p>
+                                </div>
+                            </div>
+                            <div layout-gt-sm="row">
+                                <md-input-container class="md-block" flex-gt-sm="" required>
+                                    <label>Fecha</label>
+                                    <md-datepicker ng-model="ruta.fecha_hora.fecha_creacion"></md-datepicker>
+                                </md-input-container>
+                                <md-input-container class="md-block" flex-gt-sm="">
+                                    <label>Hora de captura</label>
+                                    <input flex type="time" name="horaDeseada" ng-model="ruta.fecha_hora.hora_deseada" min="00:00:00" max="23:59:00" required>
+                                </md-input-container>
+
+                            </div>
+                            <div layout-gt-sm="row">
+                                <md-input-container class="md-block" flex-gt-sm="">
+                                    <label>Intervalo Captura (segundos)</label>
+                                    <input flex type="number" ng-model="ruta.configuracion.int_Captura" required>
+                                </md-input-container>
+
+                                <md-input-container class="md-block" flex-gt-sm="">
+                                    <label>Intervalo Envío (minutos)</label>
+                                    <input flex type="number" ng-model="ruta.configuracion.int_Envio" required>
+                                </md-input-container>
+                            </div>
+                            <div layout-gt-sm="row">
+                                <div layout="column">
+                                    <md-select placeholder="Clima" ng-model="ruta.clima" md-on-open="cargarClima()" style="min-width: 200px;" required>
+                                        <md-option ng-value="clima.name" ng-repeat="clima in climas">{{clima.name}}</md-option>
+                                    </md-select>
+                                    <p class="md-caption">Clima asignado: {{ clima ? clima.name : '--' }}</p>
+                                </div>
+                            </div>
+                        </md-content>
+
+                        <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+                            <md-button ng-click="toMap()" ng-disabled="initialData.btnNext" class="md-raised md-primary">Siguiente</md-button>
+                        </section>
+                    </div>
+                </md-tab-body>
+            </md-tab>
+            <!-- FIN TAB - INFORMACIÓN -->
+
+
+
+            <!-- TAB - MAPA -->
+            <md-tab id="mapa" ng-disabled="initialData.mapaLocked">
+                <md-tab-label>Mapa</md-tab-label>
+                <md-tab-body>
+                    <div class="containerMapa">
+
+                        <div class="izquierda">
+                            <mapboxgl class="mapa" gl-controls="glControls" gl-zoom="{ value: 15 }" gl-center="{ lat: -4.032544, lng: -79.202601 }"></mapboxgl>
+                            <!--<div mapboxgl class="mapa"></div>-->
+                        </div>
+
+                        <div class="opciones colorFondo">
+                            <div class="infoRuta">
+                                <label class="md-padding" layout="column" layout-align="center center">{{ruta.nombre}}</label>
+                            </div>
+                            <div class="waypoints">
+                                <md-content class="colorFondo make-scrollable" layout-padding="">
+                                    <div flex layout-gt-sm="row" ng-repeat="waypoint in waypoints">
+                                        <md-input-container class="md-block" flex-gt-sm="">
+                                            <label>Nombre referencia</label>
+                                            <input ng-model="waypoint.identificador" required>
+                                        </md-input-container>
+                                        <md-input-container class="md-block" flex-gt-sm="">
+                                            <label>Latitud</label>
+                                            <input ng-model="waypoint.coordenadas.latitud" required>
+                                        </md-input-container>
+                                        <md-input-container class="md-block" flex-gt-sm="">
+                                            <label>Longitud</label>
+                                            <input ng-model="waypoint.coordenadas.longitud" required>
+                                        </md-input-container>
+                                    </div>
+                                </md-content>
+                            </div>
+                            <div class="botones ">
+                                <div class="lock-size speedial" layout="row" layout-align="left center">
+                                    <md-fab-speed-dial md-open="initialData.isOpen" md-direction="{{initialData.selectedDirection}}" ng-class="initialData.selectedMode">
+                                        <md-fab-trigger>
+                                            <md-button aria-label="menu" class="md-fab md-accent">
+                                                <md-icon>
+                                                    <i class="material-icons">menu</i>
+                                                </md-icon>
+                                            </md-button>
+                                        </md-fab-trigger>
+
+                                        <md-fab-actions>
+                                            <md-button aria-label="Agregar" class="md-fab md-raised md-mini">
+                                                <md-icon>
+                                                    <i class="material-icons">add</i>
+                                                </md-icon>
+                                            </md-button>
+                                            <md-button aria-label="Borrar" class="md-fab md-raised md-mini">
+                                                <md-icon>
+                                                    <i class="material-icons">delete</i>
+                                                </md-icon>
+                                            </md-button>
+                                            <md-button aria-label="Borrar Todo" class="md-fab md-raised md-mini">
+                                                <md-icon>
+                                                    <i class="material-icons">delete_forever</i>
+                                                </md-icon>
+                                            </md-button>
+                                        </md-fab-actions>
+                                    </md-fab-speed-dial>
+                                </div>
+                                <section layout="row" class="btnGuardar" layout-sm="column" layout-align="center center" layout-wrap>
+                                    <md-button ng-click="toResumen()" ng-disabled="initialData.btnNext" class="md-raised md-primary">Siguiente</md-button>
+                                </section>
+
+                            </div>
+                        </div>
+
+
+
+
+
+
+                        <!--
+                        <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+                            <md-button ng-click="toResumen()" ng-disabled="initialData.btnNext" class="md-raised md-primary">Siguiente</md-button>
+                        </section>
+                    -->
+                    </div>
+                </md-tab-body>
+            </md-tab>
+            <!-- FIN TAB - MAPA -->
+
+
+
+
+            <!-- TAB - RESUMEN -->
+            <md-tab id="resumen" ng-disabled="initialData.resumenLocked">
+                <md-tab-label>Resumen</md-tab-label>
+                <md-tab-body>
+                    <div class="containerPrincipal">
+                        <div class="containerResumen">
+                            <div class="izqResumen">
+                                <div layout="row" layout-align="center center" class="tituloResumen">
+                                        <label>Información de ruta</label>
+                                </div>
+                                <div class="cuerpoResumen">
+                                        <div class="md-inline-form make-scrollable-izq" layout="column">
+                                                <md-content class="colorFondo" layout-padding="">
+                                                    <div layout-gt-sm="row">
+                                                        <md-input-container class="md-block" flex-gt-sm="">
+                                                            <label>Nombre ruta</label>
+                                                            <input ng-disabled="true" ng-model="ruta.nombre" required>
+                                                        </md-input-container>
+                                                        <div layout="column">
+                                                            <md-select ng-disabled="true" placeholder="Asignar a conductor" ng-model="ruta.conductor_id" md-on-open="cargarConductor()" style="min-width: 200px;"
+                                                                required>
+                                                                <md-option ng-value="conductor" ng-repeat="conductor in conductores">{{conductor.name}}</md-option>
+                                                            </md-select>
+                                                            <p class="md-caption">Conductor asignado: {{ conductor ? conductor.name : 'Nadie' }}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div layout-gt-sm="row">
+                                                        <md-input-container class="md-block" flex-gt-sm="" required>
+                                                            <label>Fecha</label>
+                                                            <md-datepicker ng-disabled="true" ng-model="ruta.fecha_hora.fecha_creacion"></md-datepicker>
+                                                        </md-input-container>
+                                                        <md-input-container class="md-block" flex-gt-sm="">
+                                                            <label>Hora de captura</label>
+                                                            <input ng-disabled="true" flex type="time" name="horaDeseada" ng-model="ruta.fecha_hora.hora_deseada" min="00:00:00" max="23:59:00" required>
+                                                        </md-input-container>
+                        
+                                                    </div>
+                                                    <div layout-gt-sm="row">
+                                                        <md-input-container class="md-block" flex-gt-sm="">
+                                                            <label>Intervalo Captura (segundos)</label>
+                                                            <input ng-disabled="true" flex type="number" ng-model="ruta.configuracion.int_Captura" required>
+                                                        </md-input-container>
+                        
+                                                        <md-input-container class="md-block" flex-gt-sm="">
+                                                            <label>Intervalo Envío (minutos)</label>
+                                                            <input ng-disabled="true" flex type="number" ng-model="ruta.configuracion.int_Envio" required>
+                                                        </md-input-container>
+                                                    </div>
+                                                    <div layout-gt-sm="row">
+                                                        <div layout="column">
+                                                            <md-select ng-disabled="true" placeholder="Clima" ng-model="clima" md-on-open="cargarClima()" style="min-width: 200px;" required>
+                                                                <md-option ng-value="clima" ng-repeat="clima in climas">{{clima.name}}</md-option>
+                                                            </md-select>
+                                                            <p class="md-caption">Clima asignado: {{ clima ? clima.name : '--' }}</p>
+                                                        </div>
+                                                    </div>
+                                                </md-content>
+                                            </div>
+                                </div>
+                            </div>
+                            <div class="derResumen">
+                                <div layout="row" layout-align="center center" class="tituloResumen">
+                                    <label>Puntos de referencia</label>
+                                </div>
+
+                                <div class="cuerpoResumen">
+                                    <md-content class="colorFondo make-scrollable" layout-padding="">
+                                        <div flex layout-gt-sm="row" ng-repeat="waypoint in waypoints">
+                                            <md-input-container class="md-block" flex-gt-sm="">
+                                                <label>Nombre referencia</label>
+                                                <input ng-disabled="true" ng-model="waypoint.identificador" required>
+                                            </md-input-container>
+                                            <md-input-container class="md-block" flex-gt-sm="">
+                                                <label>Latitud</label>
+                                                <input ng-disabled="true" ng-model="waypoint.coordenadas.latitud" required>
+                                            </md-input-container>
+                                            <md-input-container class="md-block" flex-gt-sm="">
+                                                <label>Longitud</label>
+                                                <input ng-disabled="true" ng-model="waypoint.coordenadas.longitud" required>
+                                            </md-input-container>
+                                        </div>
+                                    </md-content>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="operacionesResumen">
+                            <section class="btnGuardarTodo" layout="row" layout-sm="row" layout-align="center center" layout-wrap>
+                                <!--<md-button ng-click="toResumen()" ng-disabled="initialData.btnNext" class="md-raised md-primary">Siguiente</md-button>
+                                        <md-button ng-click="toResumen()" ng-disabled="initialData.btnNext" class="md-raised md-primary">Siguiente</md-button>-->
+                                <md-button ng-click="guardar()" class="md-raised md-primary">GUARDAR</md-button>
+                                <md-button class="md-raised md-warn">CANCELAR</md-button>
+                            </section>
+                        </div>
+                    </div>
+
+
+                </md-tab-body>
+            </md-tab>
+            <!-- FIN TAB - RESUMEN -->
+        </md-tabs>
+    </md-content>
+</div>

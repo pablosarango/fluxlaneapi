@@ -1,0 +1,71 @@
+<html lang="es">
+
+<head>
+  <meta charset="utf-8" />
+  <title>FLYCAR</title>
+
+  <!-- Angular Material requires Angular.js Libraries -->
+  <script src="angular/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-animate.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-aria.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-messages.min.js"></script>
+
+  <!-- Angular Material Library -->
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.8/angular-material.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.8/angular-material.min.js"></script>
+
+  <!-- Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <!-- Angular Ui Router Library -->
+  <script src="uirouter/angular-ui-router.min.js"></script>
+
+  <!-- Mapbox Library -->
+  <script src='https://api.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js'></script>
+  <link href='https://api.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css' rel='stylesheet' />
+
+  <!-- Angular-Mapbox Library -->
+  <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v0.43.0/mapbox-gl.css">
+  <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v0.17.0/mapbox-gl-draw.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-mapboxgl-directive/0.43.2/angular-mapboxgl-directive.min.css">
+
+  <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.43.0/mapbox-gl.js"></script>
+  <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v0.17.0/mapbox-gl-draw.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-mapboxgl-directive/0.43.2/angular-mapboxgl-directive.min.js"></script>
+</head>
+
+<body ng-app="flycar">
+  <div class="header">
+
+    <div class="iconFlyCar">
+
+    </div>
+    <div class="links">
+      <a class="textoPagina" ui-sref="inicio" ui-sref-active="active">Inicio</a>
+      <a class="textoPagina" ui-sref="cronograma" ui-sref-active="active">Cronograma</a>
+      <a class="textoPagina" ui-sref="usuarios" ui-sref-active="active">Usuarios</a>
+      <a class="textoPagina" ui-sref="editor" ui-sref-active="active">Editor</a>
+      <a class="textoPagina" ui-sref="visor" ui-sref-active="active">Visor</a>
+      <a class="textoPagina" ui-sref="opciones" ui-sref-active="active">
+        Opciones
+      </a>
+    </div>
+  </div>
+
+  <div class="body">
+    <ui-view></ui-view>
+  </div>
+
+  <div class="footer">
+
+  </div>
+
+  <!-- Custom Libraries -->
+  <script src="javascripts/main.js"></script>
+  <script src="javascripts/UserFactory.js"></script>
+  <script src="javascripts/RouteFactory.js"></script>
+  <script src="javascripts/WaypointFactory.js"></script>
+  <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+</body>
+
+</html>

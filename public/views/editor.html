@@ -1,0 +1,20 @@
+<div class="operaciones" ng-cloak="">
+
+    <md-content class="md-padding">
+        <md-nav-bar layout="row" layout-align="center center" md-selected-nav-item="currentNavItem" nav-bar-aria-label="navigation links">
+            <md-nav-item md-nav-sref="editor.crear" name="crear">
+                Crear
+            </md-nav-item>
+            <md-nav-item  md-nav-sref="editor.editar" name="editar">
+                Editar
+            </md-nav-item>
+            <md-nav-item  md-nav-sref="editor.eliminar" name="eliminar">
+                Eliminar
+            </md-nav-item>
+        </md-nav-bar>
+    </md-content>
+
+    <div class="cuerpoEditar">
+        <ui-view></ui-view>
+    </div>
+</div>
